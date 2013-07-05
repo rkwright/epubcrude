@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="com.geofx.epubcrude" default="build.jars" basedir=".">
+
+	<property name="version" value="1.0.1"/>
+	<property name="jarname" value="com.geofx.epubcrude"/>
+	<property name="jarname_v" value="${jarname}_${version}"/>
+	<property name="jarname_v_jar" value="${jarname}_${version}.jar"/>
+
+	<property name="epubcheck_dir" value="../com.geofx.epubcheck.plgin"/>
+	
+	<!-- this builds the local jars, i.e. any that this plugin depends on.  It also updates from external dependencies -->
+	<target name ="build.jars" depends="init" description="Create a jar for the epubcrude project" >
+        <zip destfile="${jarname_v_jar}" >
+ 	      	<fileset dir="bin" includes="**/*.class"/>
+ 	      	<fileset dir="bin" includes="**/*.gif"/>
+    	   	<fileset dir="." includes="icons/*.gif,META-INF/MANIFEST.MF,plugin.xml"/>
+           	<fileset dir="src" includes="com/geofx/epubcrude/plugin/Strings.properties"/>
+       	</zip>
+    </target>
+
+	<target name="init" >
+	</target>
+
+	<target name="all.children" depends="init">
+		<ant antfile="build.xml" dir="${epubcheck_dir}" target="${target}" />
+	</target>
+		
+	<!-- call the epubcheck build.xml file to build all the plugins jars and dependents, then copy the plugins to here 
+	<target name="build.children" depends="init">
+		<ant antfile="build.xml" dir="${epubcheck_dir}" target="build.jars"/>
+		<ant antfile="build.xml" dir="${epubcheck_dir}" target="update.parent">
+			<property name="dest_dir" value="${basedir}"/>
+		</ant>
+	</target>
+	-->
+	
+	<target name="update.parent" depends="init" description="Copy the plugin's jars to the specified parent folder">
+		<copy todir="${dest_dir}" failonerror="true" overwrite="true" verbose="true">
+			<fileset dir="." includes="*.jar"/>
+		</copy>
+	</target>
+	
+	<target name="clean" depends="init" description="Clean the plug-in: com.geofx.epubcrude of all the zips, jars and logs created.">
+		<delete file="${jarname_v_jar}"/>
+		<antcall target="all.children">
+			<param name="target" value="clean"/>
+		</antcall>
+	</target>
+
+	<target name="refresh" depends="init" if="eclipse.running" description="Refresh this folder.">
+		<!-- eclipse.convertPath fileSystemPath="C:/Sandbox_ADE/tools/java/com.geofx.epubcrude" property="resourcePath"/ -->
+		<eclipse.refreshLocal resource="." depth="infinite"/>
+	</target>
+
+</project>

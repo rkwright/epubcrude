@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+
+<!-- 
+ * Copyright (c) 2009 Ric Wright - Geo-F/X
+ * 
+ * All rights reserved. This program and the accompanying materials 
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/org/documents/epl-v10.html
+ *
+ *
+ --> 
+ 
+<plugin>
+	<extension 
+   		  point="org.eclipse.ui.importWizards">
+    	<category
+        	name="File Import"
+            id="com.geofx.epubcrud.importWizards.sampleCategory">
+		</category>
+	</extension>
+   
+   	<extension  
+   		  point="org.eclipse.ui.newWizards">
+    	<category
+            name="epubcrude Wizards"
+            id="com.geofx.epubcrud.wizard">
+    	</category>   
+	</extension>
+	
+   	<extension
+          point="org.eclipse.ui.perspectives">
+    	<perspective
+            class="com.geofx.epubcrude.plugin.PerspectiveFactory"
+            icon="icons/EPUB-Logo-16.gif"
+            id="com.geofx.epubcrud"
+            name="epubcrude" />
+   	</extension>
+   	
+	<extension
+    		id="com.geofx.epubcrud.nature"
+         	name="epubcrude Nature"
+            point="org.eclipse.core.resources.natures">
+	</extension>
+	
+	<extension
+         id="com.geofx.epubcrud.newproject"
+         name="New epubcrud Project"
+         point="org.eclipse.ui.newWizards">
+		<category
+			name="epubcrude"
+			id="com.geofx.epubcrud.category"	/>          
+	    <wizard
+            class="com.geofx.epubcrude.wizard.NewProjectWizard"
+            finalPerspective="com.geofx.epubcrud"
+            icon="icons/EPUB-Logo-16.gif"
+            id="com.geofx.epubcrud.projectwizard"
+            name="New epubcrude Project"
+            project="true"
+            category="com.geofx.epubcrud.category"/>
+	</extension>
+
+	<extension 
+          id="com.geofx.epubcrud.builder" 
+          name="epubcrude" 
+          point="org.eclipse.core.resources.builders">
+		<builder>
+        	<run class="com.geofx.epubcrude.builders.Builder">
+ 	        	<parameter name="optimize" value="true"/>
+           		<parameter name="comment" value="ePub Builder"/>
+	        </run>
+      	</builder>
+  	</extension>
+  	  
+ 	<extension point="org.eclipse.core.contenttype.contentTypes">
+ 		<file-association content-type="org.eclipse.core.runtime.xml" file-extensions="opf,ncx,xpgt"/>
+	</extension>
+ 
+</plugin>
