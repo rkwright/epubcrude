@@ -92,6 +92,9 @@ public class ProjectBuilder
 				
 			// causes the project tree in the Resource Navigator to be updated
 			project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+			
+			dumpProjects();
+
 		}
 		catch (CoreException x)
 		{
@@ -167,6 +170,9 @@ public class ProjectBuilder
 				
 			// causes the project tree in the Resource Navigator to be updated
 			project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+			
+			dumpProjects();
+			
 		}
 		catch (CoreException x)
 		{
@@ -185,6 +191,20 @@ public class ProjectBuilder
 			monitor.done();
 		}
 	}
+	/**
+	 *  Dump out the list of projects in the workspace
+	 */
+	private void dumpProjects()
+	{
+		IProject projects[] = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+		
+		for ( int i=0; i<projects.length; i++ )
+		{
+			System.out.printf("i: %2d, name: %s,  path: %s\n", i, projects[i].getName(), projects[i].getFullPath());
+		}
+		
+	}
+
 	private void addBuilder( IProject project, String id )
 	{
 		IProjectDescription desc;
@@ -196,10 +216,12 @@ public class ProjectBuilder
 			for (int i = 0; i < commands.length; ++i)
 				if (commands[i].getBuilderName().equals(id))
 					return;
+			
 			// add builder to project
 			ICommand command = desc.newCommand();
 			command.setBuilderName(id);
 			ICommand[] nc = new ICommand[commands.length + 1];
+			
 			// Add it before other builders.
 			System.arraycopy(commands, 0, nc, 1, commands.length);
 			nc[0] = command;

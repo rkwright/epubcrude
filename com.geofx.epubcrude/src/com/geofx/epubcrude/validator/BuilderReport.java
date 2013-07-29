@@ -32,6 +32,9 @@ import com.adobe.epubcheck.util.FeatureEnum;
 public class BuilderReport implements Report
 {
 	IProject	project;
+	protected int	errorCount = 0;
+	protected int 	warningCount = 0;
+	protected int 	exceptionCount = 0;
 	
 	public BuilderReport( IProject project, String ePubName )
 	{
@@ -39,6 +42,7 @@ public class BuilderReport implements Report
 		this.project = project; 
 	}
 
+	/*
 	public void error( String resourcePath, int line, String message  )
 	{
 		generateMarker(resourcePath, line, message,IMarker.PRIORITY_HIGH, IMarker.SEVERITY_ERROR);
@@ -55,7 +59,8 @@ public class BuilderReport implements Report
 		// System.err.println(ePubName + (resourcePath == null ? "" : "/" + resourcePath) + (line <= 0 ? "" : "(" + line + ")")
 		//				+ ": warning: " + message);
 	}
-
+	*/
+	
 	/**
 	 * @param resourcePath
 	 * @param line
@@ -86,45 +91,51 @@ public class BuilderReport implements Report
 	public void error(String resource, int line, int column, String message)
 	{
 		System.out.printf("Report.error: res: %s, line: %3d, col: %3d, msg: %s\n ", resource, line, column, message);
+		
+		generateMarker(resource, line, message,IMarker.PRIORITY_HIGH, IMarker.SEVERITY_ERROR);
+		errorCount++;
 	}
 
 	public void exception(String resource, Exception e)
 	{
-		System.out.printf("Report.exception: res: %s\n ", resource);		
+		System.err.printf("Report.exception: res: %s\n ", resource);		
+		exceptionCount++;
 	}
 
 	public int getErrorCount()
 	{
-		// TODO Auto-generated method stub
+		//System.out.printf("Report.getErrorCount!\n ");
 		return 0;
 	}
 
 	public int getExceptionCount()
 	{
-		// TODO Auto-generated method stub
+		//System.out.printf("Report.getExceptionCount!\n ");
 		return 0;
 	}
 
 	public int getWarningCount()
 	{
-		// TODO Auto-generated method stub
+		//System.out.printf("Report.getWarningCount!\n ");
 		return 0;
 	}
 
 	public void hint(String resource, int line, int column, String message)
 	{
-		System.out.printf("Report.error: res: %s, line: %3d, col: %3d, msg: %s\n ", resource, line, column, message);		
+		System.out.printf("Report.hint: res: %s, line: %3d, col: %3d, msg: %s\n ", resource, line, column, message);		
 		
 	}
 
 	public void info(String resource, FeatureEnum feature, String value)
 	{
-		System.out.printf("Report.error: res: %s, msg: %s\n ", resource, value);
+		System.out.printf("Report.info: res: %s, msg: %s\n ", resource, value);
 	}
 
 	public void warning(String resource, int line, int column, String message)
 	{
-		System.out.printf("Report.error: res: %s, line: %3d, col: %3d, msg: %s\n ", resource, line, column, message);		
+		System.out.printf("Report.warning: res: %s, line: %3d, col: %3d, msg: %s\n ", resource, line, column, message);	
+		
+		generateMarker(resource, line, message, IMarker.PRIORITY_NORMAL, IMarker.SEVERITY_WARNING);
 	}
 
 } 

@@ -21,8 +21,12 @@ import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IPath;
@@ -43,6 +47,15 @@ public class Builder extends IncrementalProjectBuilder
 	{
 		ePubFile = new EPubFile();
 	   	validator = new Validator();
+	   	
+	    IResourceChangeListener listener = new ResourceChangeReporter();
+	    ResourcesPlugin.getWorkspace().addResourceChangeListener(listener,
+	       IResourceChangeEvent.PRE_CLOSE
+	       | IResourceChangeEvent.PRE_DELETE
+	       | IResourceChangeEvent.PRE_BUILD
+	       | IResourceChangeEvent.POST_BUILD
+	       | IResourceChangeEvent.POST_CHANGE);
+
 	}
 	
 	public void setInitializationData(IConfigurationElement config, String propertyName, Object data) 
@@ -65,14 +78,13 @@ public class Builder extends IncrementalProjectBuilder
 			}
 			else
 			{
-				fullBuild(monitor);
-				//incrementalBuild(delta, monitor);
+				incrementalBuild(delta, monitor);
 			}
 		}
 		return null;
 	}
 
-	/*
+	
 	private void incrementalBuild( IResourceDelta delta, IProgressMonitor monitor )
 	{
 		System.out.println("incremental build on " + delta);
@@ -86,13 +98,16 @@ public class Builder extends IncrementalProjectBuilder
 					return true; // visit children too
 				}
 			});
+			
+			fullBuild(monitor);
+
 		}
 		catch (CoreException e)
 		{
 			e.printStackTrace();
 		}
 	}
-	*/
+	
 
 	private void fullBuild( IProgressMonitor monitor )
 	{

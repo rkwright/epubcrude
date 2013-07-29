@@ -56,34 +56,27 @@ public class Validator
 
 			if (epubIn.read(header) != header.length)
 			{
-				report.error(null, 0, "cannot read header");
+				report.error(null, -1, -1, "cannot read header");
 			}
 			else
 			{
 				if (header[0] != 'P' && header[1] != 'K')
 				{
-					report.error(null, 0, "corrupted ZIP header");
+					report.error(null, -1, -1, "corrupted ZIP header or not a zipfile");
 				}
 				else if (!CheckUtil.checkString(header, 30, "mimetype"))
 				{
-					report.error(null, 0, "mimetype entry missing or not the first in archive");
+					report.error(null, -1, -1, "mimetype entry missing or not the first in archive");
 				}
 				else if (!CheckUtil.checkString(header, 38, "application/epub+zip"))
 				{
-					report.error(null, 0, "mimetype contains wrong type (application/epub+zip expected)");
+					report.error(null, -1, -1, "mimetype contains wrong type (application/epub+zip expected)");
 				}
 			}
 
 			epubIn.close();
 
 			// ok, it's a valid zipfile, so open it as such and try to check it
-			//ZipFile zip = new ZipFile(new File(ePubName));
-
-			//OCFChecker checker = new OCFChecker(zip, report);
-
-			//checker.runChecks();
-
-			//zip.close();
 			
 			File zipFile = new File(ePubName);
 			EpubCheck checker = new EpubCheck(zipFile, report);
@@ -92,7 +85,7 @@ public class Validator
 		}
 		catch (IOException e)
 		{
-			report.error(null, 0, "I/O error: " + e.getMessage());
+			report.error(null, -1, -1, "I/O error: " + e.getMessage());
 		}
 
 		//report.flush();

@@ -17,7 +17,7 @@
    		  point="org.eclipse.ui.importWizards">
     	<category
         	name="File Import"
-            id="com.geofx.epubcrud.importWizards.sampleCategory">
+            id="com.geofx.epubcrude.importWizards.sampleCategory">
 		</category>
 	</extension>
    
@@ -25,7 +25,7 @@
    		  point="org.eclipse.ui.newWizards">
     	<category
             name="epubcrude Wizards"
-            id="com.geofx.epubcrud.wizard">
+            id="com.geofx.epubcrude.wizard">
     	</category>   
 	</extension>
 	
@@ -34,35 +34,35 @@
     	<perspective
             class="com.geofx.epubcrude.plugin.PerspectiveFactory"
             icon="icons/EPUB-Logo-16.gif"
-            id="com.geofx.epubcrud"
+            id="com.geofx.epubcrude"
             name="epubcrude" />
    	</extension>
    	
 	<extension
-    		id="com.geofx.epubcrud.nature"
+    		id="com.geofx.epubcrude.nature"
          	name="epubcrude Nature"
             point="org.eclipse.core.resources.natures">
 	</extension>
 	
 	<extension
-         id="com.geofx.epubcrud.newproject"
-         name="New epubcrud Project"
+         id="com.geofx.epubcrude.newproject"
+         name="New epubcrude Project"
          point="org.eclipse.ui.newWizards">
 		<category
 			name="epubcrude"
-			id="com.geofx.epubcrud.category"	/>          
+			id="com.geofx.epubcrude.category"	/>          
 	    <wizard
             class="com.geofx.epubcrude.wizard.NewProjectWizard"
-            finalPerspective="com.geofx.epubcrud"
+            finalPerspective="com.geofx.epubcrude"
             icon="icons/EPUB-Logo-16.gif"
-            id="com.geofx.epubcrud.projectwizard"
+            id="com.geofx.epubcrude.projectwizard"
             name="New epubcrude Project"
             project="true"
-            category="com.geofx.epubcrud.category"/>
+            category="com.geofx.epubcrude.category"/>
 	</extension>
 
 	<extension 
-          id="com.geofx.epubcrud.builder" 
+          id="com.geofx.epubcrude.builder" 
           name="epubcrude" 
           point="org.eclipse.core.resources.builders">
 		<builder>

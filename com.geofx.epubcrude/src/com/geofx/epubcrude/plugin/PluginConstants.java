@@ -37,7 +37,7 @@ public final class PluginConstants
 	/**
 	 * ProjectBuilder id from plugin.xml
 	 */
-	public static final String			BUILDER_ID				= "com.geofx.epubcrud.builder";
+	public static final String			BUILDER_ID				= "com.geofx.epubcrude.builder";
 
 	/**
 	 * project nature (for .project)
