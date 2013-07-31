@@ -21,14 +21,9 @@ import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IResourceChangeEvent;
-import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
-import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -45,26 +40,30 @@ public class Builder extends IncrementalProjectBuilder
 	
 	public Builder()
 	{
-		ePubFile = new EPubFile();
-	   	validator = new Validator();
-	   	
-	    IResourceChangeListener listener = new ResourceChangeReporter();
-	    ResourcesPlugin.getWorkspace().addResourceChangeListener(listener,
-	       IResourceChangeEvent.PRE_CLOSE
-	       | IResourceChangeEvent.PRE_DELETE
-	       | IResourceChangeEvent.PRE_BUILD
-	       | IResourceChangeEvent.POST_BUILD
-	       | IResourceChangeEvent.POST_CHANGE);
+		if (ePubFile == null)
+		{
+			ePubFile = new EPubFile();
+		   	validator = new Validator();
+		 
+			System.out.println("Build ctor - creating ResourceChangeListener");
+	
+			/* we don't need to actually listen for changes.  This is for debugging only
+		    IResourceChangeListener listener = new ResourceChangeReporter();
+		    ResourcesPlugin.getWorkspace().addResourceChangeListener(listener,
+		       IResourceChangeEvent.PRE_CLOSE
+		       | IResourceChangeEvent.PRE_DELETE
+		       | IResourceChangeEvent.PRE_BUILD
+		       | IResourceChangeEvent.POST_BUILD
+		       | IResourceChangeEvent.POST_CHANGE);
+		    */
+		}
 
 	}
 	
-	public void setInitializationData(IConfigurationElement config, String propertyName, Object data) 
-	{
-	}
 	
 	protected IProject[] build( int kind, Map args, IProgressMonitor monitor )
 	{
-		System.out.println("Build called");
+		System.err.println("Build called");
 		if (kind == IncrementalProjectBuilder.FULL_BUILD)
 		{
 			fullBuild(monitor);
@@ -78,16 +77,20 @@ public class Builder extends IncrementalProjectBuilder
 			}
 			else
 			{
-				incrementalBuild(delta, monitor);
+				// we don't have any way to tell what impact a changed resource will have on the whole EPUB
+				// so we always do a full "build"	
+				fullBuild(monitor);
+				//incrementalBuild(delta, monitor);
 			}
 		}
 		return null;
 	}
 
 	
+	/* we don't need incremental builds
 	private void incrementalBuild( IResourceDelta delta, IProgressMonitor monitor )
 	{
-		System.out.println("incremental build on " + delta);
+		System.err.println("incremental build on " + delta);
 		try
 		{
 			delta.accept(new IResourceDeltaVisitor()
@@ -107,20 +110,21 @@ public class Builder extends IncrementalProjectBuilder
 			e.printStackTrace();
 		}
 	}
-	
+	*/
 
 	private void fullBuild( IProgressMonitor monitor )
 	{
 		IProject project;
         String ePubName;
-        
+
+		System.err.println("Full build invoked");
+
 		try
 		{
 			project = getProject();
 			ePubName = project.getPersistentProperty(PluginConstants.EPUBFILE_PROPERTY_NAME);
 		
 	        IPath	projectPath = project.getLocation();
-	        // System.out.println("ePubName = " + ePubName + " path = " + projectPath.toOSString());
 
 	        monitor.subTask(Resources.getString("eclipse.creatingfiles"));
 	        

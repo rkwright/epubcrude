@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/org/documents/epl-v10.html
  *
- *  File:       ProjectBuilder.java
+ *  File:       ProjectCreator.java
  *  Created:    27 November 2006
 
  *  Contributors:
@@ -15,8 +15,6 @@
  */
 
 package com.geofx.epubcrude.builders;
-
-import java.io.IOException;
 
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;
@@ -33,7 +31,7 @@ import com.geofx.epubcrude.plugin.Activator;
 import com.geofx.epubcrude.plugin.PluginConstants;
 import com.geofx.epubcrude.plugin.Resources;
 
-public class ProjectBuilder
+public class ProjectCreator
 {
 
 	public void createProjectFromEPubFile(  String importFileName, IPath projectPath, String projectName, IProgressMonitor monitor )
@@ -86,10 +84,6 @@ public class ProjectBuilder
 			// project's folder
 		   	ePubFile.extractEPub( project.getLocation().toString(), importFileName );
 				
-		   	// this creates a new ePub file in the new project's folder 
-		   	// TODO: Do we need to do this?  Wouldn't/Shouldn't the builder be invoked automatically?
-			ePubFile.createEPub( project.getLocation().toString(), ePubFileName );
-				
 			// causes the project tree in the Resource Navigator to be updated
 			project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 			
@@ -99,10 +93,6 @@ public class ProjectBuilder
 		catch (CoreException x)
 		{
 			x.printStackTrace();
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
 		}
 		catch (Exception e)
 		{
@@ -163,11 +153,7 @@ public class ProjectBuilder
 			// here we extract the contents of the user's SOURCE ePub file and serialize them into the 
 			// project's folder
 		   	// ePubFile.extractEPub( project.getLocation().toString(), importFileName );
-				
-		   	// this creates a new ePub file in the new project's folder 
-		   	// TODO: Do we need to do this?  Wouldn't/Shouldn't the builder be invoked automatically?
-			ePubFile.createEPub( project.getLocation().toString(), ePubFileName );
-				
+								
 			// causes the project tree in the Resource Navigator to be updated
 			project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 			
@@ -178,10 +164,6 @@ public class ProjectBuilder
 		{
 			x.printStackTrace();
 		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
@@ -191,20 +173,13 @@ public class ProjectBuilder
 			monitor.done();
 		}
 	}
+	
 	/**
-	 *  Dump out the list of projects in the workspace
+	 * Add the builder id to the project's description so it will get built
+	 * 
+	 * @param project
+	 * @param id
 	 */
-	private void dumpProjects()
-	{
-		IProject projects[] = ResourcesPlugin.getWorkspace().getRoot().getProjects();
-		
-		for ( int i=0; i<projects.length; i++ )
-		{
-			System.out.printf("i: %2d, name: %s,  path: %s\n", i, projects[i].getName(), projects[i].getFullPath());
-		}
-		
-	}
-
 	private void addBuilder( IProject project, String id )
 	{
 		IProjectDescription desc;
@@ -216,7 +191,9 @@ public class ProjectBuilder
 			for (int i = 0; i < commands.length; ++i)
 				if (commands[i].getBuilderName().equals(id))
 					return;
-			
+
+			System.err.printf("Adding %s to the %s project at %s\n", id, project.getName(), project.getFullPath());
+
 			// add builder to project
 			ICommand command = desc.newCommand();
 			command.setBuilderName(id);
@@ -234,4 +211,32 @@ public class ProjectBuilder
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 *  Dump out the list of projects in the workspace
+	 * @throws CoreException 
+	 */
+	static public void dumpProjects() throws CoreException
+	{
+		IProject projects[] = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+		
+		for ( int i=0; i<projects.length; i++ )
+		{
+			System.out.printf("i: %2d, name: %s,  path: %s\n", i, projects[i].getName(), projects[i].getFullPath());
+			dumpBuilders(projects[i]);
+		}
+
+	}
+
+	static private void dumpBuilders(IProject project) throws CoreException
+	{
+		ICommand[] commands = project.getDescription().getBuildSpec();
+		for (int i = 0; i < commands.length; ++i)
+		{
+			System.out.printf("Project name: %s,  builder: %s\n", project.getName(), commands[i].getBuilderName());
+
+		}
+	}
+			
+
 }

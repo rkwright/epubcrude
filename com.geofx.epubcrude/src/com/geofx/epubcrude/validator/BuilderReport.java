@@ -41,25 +41,6 @@ public class BuilderReport implements Report
 		//super(ePubName);
 		this.project = project; 
 	}
-
-	/*
-	public void error( String resourcePath, int line, String message  )
-	{
-		generateMarker(resourcePath, line, message,IMarker.PRIORITY_HIGH, IMarker.SEVERITY_ERROR);
-		
-		// System.err.println(ePubName + (resourcePath == null ? "" : "/" + resourcePath) + (line <= 0 ? "" : "(" + line + ")") + ": "
-		//				+ message);	
-	}
-
-
-	public void warning( String resourcePath, int line, String message )
-	{
-		generateMarker(resourcePath, line, message, IMarker.PRIORITY_NORMAL, IMarker.SEVERITY_WARNING);
-		
-		// System.err.println(ePubName + (resourcePath == null ? "" : "/" + resourcePath) + (line <= 0 ? "" : "(" + line + ")")
-		//				+ ": warning: " + message);
-	}
-	*/
 	
 	/**
 	 * @param resourcePath
@@ -104,20 +85,17 @@ public class BuilderReport implements Report
 
 	public int getErrorCount()
 	{
-		//System.out.printf("Report.getErrorCount!\n ");
-		return 0;
+		return errorCount;
 	}
 
 	public int getExceptionCount()
 	{
-		//System.out.printf("Report.getExceptionCount!\n ");
-		return 0;
+		return exceptionCount;
 	}
 
 	public int getWarningCount()
 	{
-		//System.out.printf("Report.getWarningCount!\n ");
-		return 0;
+		return warningCount;
 	}
 
 	public void hint(String resource, int line, int column, String message)
@@ -128,12 +106,12 @@ public class BuilderReport implements Report
 
 	public void info(String resource, FeatureEnum feature, String value)
 	{
-		System.out.printf("Report.info: res: %s, msg: %s\n ", resource, value);
+		//System.out.printf("Report.info: res: %s, msg: %s\n ", resource, value);
 	}
 
 	public void warning(String resource, int line, int column, String message)
 	{
-		System.out.printf("Report.warning: res: %s, line: %3d, col: %3d, msg: %s\n ", resource, line, column, message);	
+		//System.out.printf("Report.warning: res: %s, line: %3d, col: %3d, msg: %s\n ", resource, line, column, message);	
 		
 		generateMarker(resource, line, message, IMarker.PRIORITY_NORMAL, IMarker.SEVERITY_WARNING);
 	}

@@ -21,7 +21,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import com.geofx.epubcrude.builders.EPubFile;
-import com.geofx.epubcrude.builders.ProjectBuilder;
+import com.geofx.epubcrude.builders.ProjectCreator;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -31,7 +31,7 @@ public class Activator extends AbstractUIPlugin
 
 	// The plug-in ID
 	public static final String	PLUGIN_ID	= "com.geofx.epubcrude.plugin";
-	private ProjectBuilder			builder;
+	private ProjectCreator			creator;
 	private EPubFile				ePubFile;
 
 	// The shared instance
@@ -54,8 +54,10 @@ public class Activator extends AbstractUIPlugin
 	{
 		super.start(context);
 		
-		builder = new ProjectBuilder();
+		creator = new ProjectCreator();
 		ePubFile = new EPubFile();
+		
+		ProjectCreator.dumpProjects();
 	}
 
 	/*
@@ -91,9 +93,9 @@ public class Activator extends AbstractUIPlugin
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
 	}
 
-	public ProjectBuilder getBuilder()
+	public ProjectCreator getBuilder()
 	{
-		return builder;
+		return creator;
 	}
 
 	public EPubFile getEPubFile()

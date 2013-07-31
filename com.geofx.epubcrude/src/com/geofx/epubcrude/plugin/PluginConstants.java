@@ -35,7 +35,7 @@ public final class PluginConstants
 	public static final String			CONSOLE_ID				= "com.geofx.epubcrude.plugin.views.console";
 
 	/**
-	 * ProjectBuilder id from plugin.xml
+	 * ProjectCreator id from plugin.xml
 	 */
 	public static final String			BUILDER_ID				= "com.geofx.epubcrude.builder";
 

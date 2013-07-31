@@ -30,10 +30,6 @@ import com.adobe.epubcheck.util.CheckUtil;
 
 public class Validator
 {
-	public Validator()
-	{		
-		System.err.println("Wowser");
-	}
 	
 	public boolean validate ( IProject project, String ePubName )
 	{
@@ -87,8 +83,6 @@ public class Validator
 		{
 			report.error(null, -1, -1, "I/O error: " + e.getMessage());
 		}
-
-		//report.flush();
 		
 		return true;
 	}
