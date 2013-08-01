@@ -63,17 +63,18 @@ public class ProjectTypeWizardPage extends WizardPage
 		layout.verticalSpacing = 9;
 		
 		createRadioButton(controls, "Import existing &ePub document", 10, 5, 275, 40, IMPORT_EXISTING_EPUB, true);
-
+		/*
 		createRadioButton(controls, "Import existing &OEBPS document", 10, 30, 275, 40, IMPORT_EXISTING_OEB, false);
 
 		createRadioButton(controls, "Import existing &HTML document", 10, 55, 275, 40, IMPORT_EXISTING_HTML, false);
 	    
 	    createRadioButton(controls, "&Create ePub document from scratch", 10, 75, 275, 40, CREATE_FROM_SCRATCH, false);	   
-	    
+	    */
 		setControl(controls);
 	}
 
-	void createRadioButton( Composite parent, String label, int x, int y, int width, int height, final int index, boolean selected )
+	void createRadioButton( Composite parent, String label, int x, int y, int width, int height, 
+									final int index, boolean selected )
 	{
 	    radios[index] = new Button(parent, SWT.RADIO);
 	    radios[index].setText( label );
