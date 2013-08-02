@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/com.geofx.epubcrude.feature_1.0.0.qualifier.jar" id="com.geofx.epubcrude.feature" version="1.0.0.qualifier">
+      <category name="com.geofx.epubcrude.category"/>
+   </feature>
+   <category-def name="com.geofx.epubcrude.category" label="epub tools">
+      <description>
+         epub editing tools, of which only epubcrude itself exists at this time.
+      </description>
+   </category-def>
+</site>

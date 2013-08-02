@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="com.geofx.epubcrude.feature"
+      label="epubcrude Feature"
+      version="1.0.3.qualifier"
+      provider-name="Geo-F/X">
+
+   <description url="http://www.example.com/description">
+      epubcrude is an Eclipse plugin and perspective that allows users to create, replace, update, delete and edit EPUB files. epubcrude uses the IDPF epubchecker 3.0.1 to validate the files. Note that epubcrude is NOT a WYSIWYG editor. The Readium Core doesn&apos;t underly it oranything like it. To see what an EPUB looks like after creation or editing, you&apos;ll need to open it in a compliant EPUB Reader. I&apos;ll look into making this easier in the future, but for now it&apos;s just an easy way to check for errors and problems in your EPUB files and then fix them.
+
+Note: Many thanks to the excellent engineers who wrote EPUBCheck, including 
+
+Peter Sorotokin 
+Garth Conboy 
+Markus Gylling 
+Piotr Kula 
+Paul Norton 
+Jessica Hekman 
+Liza Daly 
+George Bina 
+Bogdan Iordache 
+Romain Deltour 
+Thomas Ledoux 
+Tobias Fischer
+   </description>
+
+   <copyright url="http://www.example.com/copyright">
+      No copyright at this time.
+   </copyright>
+
+   <license url="http://www.example.com/license">
+      All rights reserved. This program and the accompanying materials 
+are made available under the terms of the Eclipse Public License v1.0
+which accompanies this distribution, and is available at
+http://www.eclipse.org/org/documents/epl-v10.html
+   </license>
+
+   <plugin
+         id="com.geofx.epubcrude"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.idpf.epubcheck"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>
