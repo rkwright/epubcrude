@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2009-14 Ric Wright - Geo-F/X
+ * 
+ * All rights reserved. This program and the accompanying materials 
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/org/documents/epl-v10.html
+ *
+ *  File:       PluginTools.java
+ *  Created:    27 November 2009
+
+ *  Contributors:
+ *     Ric Wright - initial implementation
+ *
+ */
+
 package com.geofx.epubcrude.plugin;
 
 import org.eclipse.core.commands.ExecutionEvent;
@@ -70,7 +86,6 @@ public class RenameEPUB implements IHandler
 			}
 			catch (CoreException e)
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 

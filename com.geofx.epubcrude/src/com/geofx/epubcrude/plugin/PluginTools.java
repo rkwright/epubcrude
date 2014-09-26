@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009 Ric Wright - Geo-F/X
+ * Copyright (c) 2009-14 Ric Wright - Geo-F/X
  * 
  * All rights reserved. This program and the accompanying materials 
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/org/documents/epl-v10.html
  *
  *  File:       PluginTools.java
- *  Created:    27 November 2006
+ *  Created:    27 November 2009
 
  *  Contributors:
  *     Ric Wright - initial implementation
