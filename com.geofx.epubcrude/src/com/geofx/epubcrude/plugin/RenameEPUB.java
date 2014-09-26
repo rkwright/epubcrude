@@ -64,7 +64,7 @@ public class RenameEPUB implements IHandler
 			// next time
 			try
 			{
-				String curName = project.getPersistentProperty(PluginConstants.EPUBFILE_PROPERTY_NAME );
+				project.getPersistentProperty(PluginConstants.EPUBFILE_PROPERTY_NAME );
 
 				project.setPersistentProperty(PluginConstants.EPUBFILE_PROPERTY_NAME, parts[1]);
 			}
