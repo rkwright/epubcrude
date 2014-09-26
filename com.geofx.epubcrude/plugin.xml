@@ -72,6 +72,33 @@
 	        </run>
       	</builder>
   	</extension>
+  	<extension
+        point="org.eclipse.ui.commands">
+     <command
+           defaultHandler="com.geofx.epubcrude.plugin.RenameEPUB"
+           description="Rename the current project&apos;s output EPUB"
+           id="com.geofx.epubcrude.renameEPUB"
+           name="name">
+     </command>
+  </extension>
+  <extension
+        point="org.eclipse.ui.menus">
+     <menuContribution
+           allPopups="false"
+           locationURI="toolbar:org.eclipse.ui.main.toolbar">
+        <toolbar
+              id="com.geofx.epubcrude.toolbar">
+           <command
+                 commandId="com.geofx.epubcrude.renameEPUB"
+                 disabledIcon="icons/EPUB-Logo-16.gif"
+                 icon="icons/EPUB-Logo-16.gif"
+                 label="Rename EPUB"
+                 style="push"
+                 tooltip="Reanme the EPUB output file">
+           </command>
+        </toolbar>
+     </menuContribution>
+  </extension>
   	  
  	<extension point="org.eclipse.core.contenttype.contentTypes">
  		<file-association content-type="org.eclipse.core.runtime.xml" file-extensions="opf,ncx,xpgt"/>
