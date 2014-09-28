@@ -20,3 +20,4 @@ Bundle-ClassPath: .
 Export-Package: com.geofx.epubcrude.builders,
  com.geofx.epubcrude.plugin,
  com.geofx.epubcrude.validator
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
