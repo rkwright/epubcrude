@@ -3,6 +3,7 @@
    <feature url="features/com.geofx.epubcrude.feature_1.0.0.qualifier.jar" id="com.geofx.epubcrude.feature" version="1.0.0.qualifier">
       <category name="com.geofx.epubcrude.category"/>
    </feature>
+   <bundle id="com.geofx.epubcrude" version="1.0.3.qualifier"/>
    <category-def name="com.geofx.epubcrude.category" label="epub tools">
       <description>
          epub editing tools, of which only epubcrude itself exists at this time.
