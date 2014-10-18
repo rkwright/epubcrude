@@ -16,11 +16,15 @@
 
 package com.geofx.epubcrude.plugin;
 
+import java.util.Map;
+
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
+import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -49,47 +53,48 @@ public class RenameEPUB implements IHandler
 		// InputDialog.openInformation(HandlerUtil.getActiveWorkbenchWindow(event).getShell(),
 		// "Info", "Info for you");
 		// Create a label to display what the user typed in
-		//final Label label = new Label(composite, SWT.NONE);
-		//label.setText("This will display the user input from InputDialog");
+		// final Label label = new Label(composite, SWT.NONE);
+		// label.setText("This will display the user input from InputDialog");
 
-		InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), "", "Enter new name for the EPUB file", "Current name",
-				new NameChecker());
+		InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), "", 
+								"Enter new name for the EPUB file",	"Current name", new NameChecker());
+
 		if (dlg.open() == Window.OK)
 		{
 			// User clicked OK; update the label with the input
-			
-			
+
 			// get the root, which is needed for all sorts of stuff
 			IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-			
-			String		command = dlg.getValue();
-			String[] 	parts;
-			
-			if (command.contains(",")) 
+
+			String command = dlg.getValue();
+			String[] parts;
+
+			if (command.contains(","))
 			{
 				parts = command.split(",");
-		} 
-			else 
-			{
-			    throw new IllegalArgumentException("String " + command + " does not contain two strings-");
 			}
-			
+			else
+			{
+				throw new IllegalArgumentException("String " + command + " does not contain two strings-");
+			}
+
 			// get project root
 			IProject project = root.getProject(parts[0]);
-			// save the filename in the project. This will be serialized into the .project file for
-			// next time
-			try
-			{
-				project.getPersistentProperty(PluginConstants.EPUBFILE_PROPERTY_NAME );
 
-				project.setPersistentProperty(PluginConstants.EPUBFILE_PROPERTY_NAME, parts[1]);
-			}
-			catch (CoreException e)
-			{
-				e.printStackTrace();
-			}
+			// save the filename in the project object. This will be serialized into the .project 
+			// file for next time
 
-			return null;
+			saveEPUBName(project, parts[1]);
+
+			/*
+			 * try { project.getPersistentProperty(PluginConstants.EPUBFILE_PROPERTY_NAME );
+			 * 
+			 * project.setPersistentProperty(PluginConstants.EPUBFILE_PROPERTY_NAME, parts[1]); }
+			 * catch (CoreException e) { e.printStackTrace(); }
+			 * 
+			 * return null;
+			 */
+
 		}
 		return null;
 	}
@@ -112,6 +117,33 @@ public class RenameEPUB implements IHandler
 
 	}
 
+	public void saveEPUBName ( IProject project, String ePubName )
+	{
+		try
+		{
+			IProjectDescription description = project.getDescription();
+		
+			ICommand command = description.newCommand();
+
+			Map<String,String>  nameMap = command.getArguments();
+			nameMap.put(PluginConstants.EPUBFILE_NAME, ePubName);
+			command.setArguments(nameMap);
+			
+			ICommand[] commands = description.getBuildSpec();
+			
+			ICommand[] newCommand = new ICommand[commands.length + 1];
+			System.arraycopy(commands, 0, newCommand, 1, commands.length);
+			newCommand[0] = command;
+			
+			description.setBuildSpec(newCommand);
+			project.setDescription(description, null);
+		}
+		catch (CoreException e)
+		{
+			e.printStackTrace();
+		}
+
+	}
 	/**
 	 * This class validates a String. It makes sure that the String is between 5 and 8
 	 * characters

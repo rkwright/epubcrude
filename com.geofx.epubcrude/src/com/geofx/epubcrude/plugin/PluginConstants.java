@@ -79,7 +79,7 @@ public final class PluginConstants
 	 * property qualified name for the epub filename
 	 */	
 	public static final QualifiedName	EPUBFILE_PROPERTY_NAME	= new QualifiedName(PROPERTY_NAMESPACE, EPUBFILE_NAME);
-	
+
 	/**
 	 * property qualified name for the build status
 	 */
