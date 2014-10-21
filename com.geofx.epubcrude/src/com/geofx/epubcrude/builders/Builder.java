@@ -17,7 +17,6 @@
 package com.geofx.epubcrude.builders;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.resources.ICommand;
@@ -29,7 +28,6 @@ import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.QualifiedName;
 
 import com.geofx.epubcrude.plugin.PluginConstants;
 import com.geofx.epubcrude.plugin.Resources;
@@ -128,13 +126,15 @@ public class Builder extends IncrementalProjectBuilder
 			project = getProject();
 			
 			ePubName = getEPUBName(project);
-			if (ePubName == null || ePubName == "")
+			/*
+			  if (ePubName == null || ePubName == "")
 			{
 				ePubName = project.getPersistentProperty(PluginConstants.EPUBFILE_PROPERTY_NAME);
 				System.out.println("persistent Property ePubName: " + ePubName);
 			}
 			
 			RenameEPUB.saveEPUBName(project, ePubName);
+			*/
 			
 	        IPath	projectPath = project.getLocation();
 
