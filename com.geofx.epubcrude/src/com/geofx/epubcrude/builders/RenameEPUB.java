@@ -126,18 +126,19 @@ public class RenameEPUB implements IHandler
 			IProjectDescription description = project.getDescription();
 		
 			ICommand command = description.newCommand();
+			command.setBuilderName(PluginConstants.BUILDER_ID);
 
 			Map<String,String>  nameMap = command.getArguments();
 			nameMap.put(PluginConstants.EPUBFILE_NAME, ePubName);
 			command.setArguments(nameMap);
 			
-			ICommand[] commands = description.getBuildSpec();
+			//ICommand[] commands = description.getBuildSpec();
 			
-			ICommand[] newCommand = new ICommand[commands.length + 1];
-			System.arraycopy(commands, 0, newCommand, 1, commands.length);
-			newCommand[0] = command;
+			ICommand[] commands = new ICommand[1];
+			//System.arraycopy(commands, 0, newCommand, 1, commands.length);
+			commands[0] = command;
 			
-			description.setBuildSpec(newCommand);
+			description.setBuildSpec(commands);
 			project.setDescription(description, null);
 		}
 		catch (CoreException e)

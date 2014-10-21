@@ -47,9 +47,9 @@ public class Builder extends IncrementalProjectBuilder
 			ePubFile = new EPubFile();
 		   	validator = new Validator();
 		 
-			System.out.println("Build ctor - creating ResourceChangeListener");
-	
 			/* we don't need to actually listen for changes.  This is for debugging only
+			System.out.println("Build ctor - creating ResourceChangeListener");
+
 		    IResourceChangeListener listener = new ResourceChangeReporter();
 		    ResourcesPlugin.getWorkspace().addResourceChangeListener(listener,
 		       IResourceChangeEvent.PRE_CLOSE
@@ -119,13 +119,14 @@ public class Builder extends IncrementalProjectBuilder
 		IProject project;
         String ePubName;
 
-		System.err.println("Full build invoked");
-
 		try
 		{
 			project = getProject();
 			
 			ePubName = getEPUBName(project);
+			
+			System.err.println("Full build invoked on project: " + project.getName() + ", building: " + ePubName);
+
 			/*
 			  if (ePubName == null || ePubName == "")
 			{
