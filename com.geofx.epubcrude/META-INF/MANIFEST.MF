@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: EPUBCrude
 Bundle-SymbolicName: com.geofx.epubcrude;singleton:=true
-Bundle-Version: 1.0.3.qualifier
+Bundle-Version: 1.0.4.qualifier
 Bundle-Activator: com.geofx.epubcrude.plugin.Activator
 Bundle-Vendor: Geo-F/X
 Bundle-Localization: plugin

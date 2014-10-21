@@ -75,8 +75,9 @@ public class ProjectCreator
 			String ePubFileName = EPubFile.getFileName( importFileName );
 
 			// save the filename in the project.  This will be serialized into the .project file for next time
-			project.setPersistentProperty(PluginConstants.EPUBFILE_PROPERTY_NAME, ePubFileName );
-		
+			//project.setPersistentProperty(PluginConstants.EPUBFILE_PROPERTY_NAME, ePubFileName );
+			RenameEPUB.saveEPUBName(project,  ePubFileName);
+			
 			// get the singleton instance of the ePubFile object. It has quasi-static methods we want.
 			EPubFile ePubFile = Activator.getDefault().getEPubFile();
 			
@@ -145,8 +146,9 @@ public class ProjectCreator
 			//String ePubFileName = EPubFile.getFileName( importFileName );
 
 			// save the filename in the project.  This will be serialized into the .project file for next time
-			project.setPersistentProperty(PluginConstants.EPUBFILE_PROPERTY_NAME, ePubFileName );
-		
+			//project.setPersistentProperty(PluginConstants.EPUBFILE_PROPERTY_NAME, ePubFileName );
+			RenameEPUB.saveEPUBName(project,  ePubFileName);
+
 			// get the singleton instance of the ePubFile object. It has quasi-static methods we want.
 			EPubFile ePubFile = Activator.getDefault().getEPubFile();
 			

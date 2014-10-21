@@ -134,6 +134,8 @@ public class Builder extends IncrementalProjectBuilder
 				System.out.println("persistent Property ePubName: " + ePubName);
 			}
 			
+			RenameEPUB.saveEPUBName(project, ePubName);
+			
 	        IPath	projectPath = project.getLocation();
 
 	        monitor.subTask(Resources.getString("eclipse.creatingfiles"));

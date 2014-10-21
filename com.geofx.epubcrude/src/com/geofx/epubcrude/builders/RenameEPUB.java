@@ -14,7 +14,7 @@
  *
  */
 
-package com.geofx.epubcrude.plugin;
+package com.geofx.epubcrude.builders;
 
 import java.util.Map;
 
@@ -32,6 +32,8 @@ import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
+
+import com.geofx.epubcrude.plugin.PluginConstants;
 
 public class RenameEPUB implements IHandler
 {
@@ -117,7 +119,7 @@ public class RenameEPUB implements IHandler
 
 	}
 
-	public void saveEPUBName ( IProject project, String ePubName )
+	static public void saveEPUBName ( IProject project, String ePubName )
 	{
 		try
 		{
