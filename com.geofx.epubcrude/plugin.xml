@@ -75,7 +75,7 @@
   	<extension
         point="org.eclipse.ui.commands">
      <command
-           defaultHandler="com.geofx.epubcrude.builders.RenameEPUB"
+           defaultHandler="com.geofx.epubcrude.builders.EPUBUtil"
            description="Rename the current project&apos;s output EPUB"
            id="com.geofx.epubcrude.renameEPUB"
            name="name">

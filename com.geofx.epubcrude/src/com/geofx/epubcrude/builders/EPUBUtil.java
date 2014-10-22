@@ -25,17 +25,20 @@ import org.eclipse.core.commands.IHandlerListener;
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IPageLayout;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 
 import com.geofx.epubcrude.plugin.PluginConstants;
 
-public class RenameEPUB implements IHandler
+public class EPUBUtil implements IHandler
 {
 
 	public void addHandlerListener(IHandlerListener handlerListener)
@@ -52,71 +55,43 @@ public class RenameEPUB implements IHandler
 
 	public Object execute(ExecutionEvent event) throws ExecutionException
 	{
-		// InputDialog.openInformation(HandlerUtil.getActiveWorkbenchWindow(event).getShell(),
-		// "Info", "Info for you");
-		// Create a label to display what the user typed in
-		// final Label label = new Label(composite, SWT.NONE);
-		// label.setText("This will display the user input from InputDialog");
+		IProject	project = getSelectedProject();
+		if (project == null)
+		{
+			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", "Please select a project");
+			return null;
+		}
 
 		InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), "", 
-								"Enter new name for the EPUB file",	"Current name", new NameChecker());
+								"Enter new name for the EPUB file for " + project.getName(), getEPUBName(project), new NameChecker());
 
 		if (dlg.open() == Window.OK)
-		{
-			// User clicked OK; update the label with the input
-
-			// get the root, which is needed for all sorts of stuff
-			IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-
-			String command = dlg.getValue();
-			String[] parts;
-
-			if (command.contains(","))
+		{			
+			String newName = dlg.getValue();
+			if (newName.indexOf(".epub") > 0 || newName.indexOf(".EPUB") > 0)
 			{
-				parts = command.split(",");
+				// save the filename in the project object. This will be serialized into the .project file 
+				saveEPUBName(project, newName);				
 			}
 			else
-			{
-				throw new IllegalArgumentException("String " + command + " does not contain two strings-");
-			}
-
-			// get project root
-			IProject project = root.getProject(parts[0]);
-
-			// save the filename in the project object. This will be serialized into the .project 
-			// file for next time
-
-			saveEPUBName(project, parts[1]);
-
-			/*
-			 * try { project.getPersistentProperty(PluginConstants.EPUBFILE_PROPERTY_NAME );
-			 * 
-			 * project.setPersistentProperty(PluginConstants.EPUBFILE_PROPERTY_NAME, parts[1]); }
-			 * catch (CoreException e) { e.printStackTrace(); }
-			 * 
-			 * return null;
-			 */
-
+				MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", "Invalid output name, must be .epub or .EPUB");
 		}
+		
 		return null;
 	}
 
 	public boolean isEnabled()
 	{
-		//System.out.printf("Is enabled?\n");
 		return true;
 	}
 
 	public boolean isHandled()
 	{
-		//System.out.printf("Is handled\n");
 		return true;
 	}
 
 	public void removeHandlerListener(IHandlerListener handlerListener)
 	{
-		// TODO Auto-generated method stub
-
 	}
 
 	static public void saveEPUBName ( IProject project, String ePubName )
@@ -131,11 +106,8 @@ public class RenameEPUB implements IHandler
 			Map<String,String>  nameMap = command.getArguments();
 			nameMap.put(PluginConstants.EPUBFILE_NAME, ePubName);
 			command.setArguments(nameMap);
-			
-			//ICommand[] commands = description.getBuildSpec();
-			
+					
 			ICommand[] commands = new ICommand[1];
-			//System.arraycopy(commands, 0, newCommand, 1, commands.length);
 			commands[0] = command;
 			
 			description.setBuildSpec(commands);
@@ -146,6 +118,49 @@ public class RenameEPUB implements IHandler
 			e.printStackTrace();
 		}
 
+	}
+	
+	static public String getEPUBName ( IProject project )
+	{
+		String	ePubName = "";
+
+		try
+		{
+			IProjectDescription description = project.getDescription();			
+	
+			ICommand[] 	commands = description.getBuildSpec();
+			
+			if (commands.length> 0)
+			{
+				ICommand command = commands[0];
+				Map<String,String>  nameMap = command.getArguments();
+				ePubName = nameMap.get(PluginConstants.EPUBFILE_NAME);
+			}
+		}
+		catch (CoreException e)
+		{
+			e.printStackTrace();
+		}
+
+		//System.out.println(".project ePubName: " + ePubName);
+		return ePubName;
+	}
+	
+	protected IProject getSelectedProject()
+	{
+		
+		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+			
+		IStructuredSelection selection = (IStructuredSelection)window.getSelectionService().getSelection(IPageLayout.ID_PROJECT_EXPLORER);
+		
+		IProject project = null;
+			
+		if (selection != null && selection.getFirstElement() instanceof IProject )
+		{
+			project = (IProject) selection.getFirstElement();
+		}
+					    
+		return project;
 	}
 	/**
 	 * This class validates a String. It makes sure that the String is between 5 and 8

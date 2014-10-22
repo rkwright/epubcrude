@@ -15,7 +15,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.ide,
  org.eclipse.ui.navigator,
  org.idpf.epubcheck;bundle-version="3.0.1"
-Eclipse-LazyStart: true
+Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Export-Package: com.geofx.epubcrude.builders,
  com.geofx.epubcrude.plugin,

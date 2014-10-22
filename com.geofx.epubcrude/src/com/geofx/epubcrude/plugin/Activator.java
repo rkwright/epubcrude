@@ -45,6 +45,8 @@ public class Activator extends AbstractUIPlugin
 		plugin = this;
 	}
 
+	public static Activator getPlugin()  { return plugin; }
+	
 	/*
 	 * (non-Javadoc)
 	 * 

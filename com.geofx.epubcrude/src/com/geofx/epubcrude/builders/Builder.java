@@ -19,9 +19,7 @@ package com.geofx.epubcrude.builders;
 import java.io.IOException;
 import java.util.Map;
 
-import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
@@ -29,7 +27,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import com.geofx.epubcrude.plugin.PluginConstants;
 import com.geofx.epubcrude.plugin.Resources;
 import com.geofx.epubcrude.validator.Validator;
 
@@ -123,19 +120,9 @@ public class Builder extends IncrementalProjectBuilder
 		{
 			project = getProject();
 			
-			ePubName = getEPUBName(project);
+			ePubName = EPUBUtil.getEPUBName(project);
 			
 			System.err.println("Full build invoked on project: " + project.getName() + ", building: " + ePubName);
-
-			/*
-			  if (ePubName == null || ePubName == "")
-			{
-				ePubName = project.getPersistentProperty(PluginConstants.EPUBFILE_PROPERTY_NAME);
-				System.out.println("persistent Property ePubName: " + ePubName);
-			}
-			
-			RenameEPUB.saveEPUBName(project, ePubName);
-			*/
 			
 	        IPath	projectPath = project.getLocation();
 
@@ -157,59 +144,5 @@ public class Builder extends IncrementalProjectBuilder
 		{
 			e.printStackTrace();			
 		}	
-	}
-	
-	public void saveEPUBName ( IProject project, String ePubName )
-	{
-		try
-		{
-			IProjectDescription description = project.getDescription();
-		
-			ICommand command = description.newCommand();
-
-			Map<String,String>  nameMap = command.getArguments();
-			nameMap.put(PluginConstants.EPUBFILE_NAME, ePubName);
-			command.setArguments(nameMap);
-			
-			ICommand[] commands = description.getBuildSpec();
-			
-			ICommand[] newCommand = new ICommand[commands.length + 1];
-			System.arraycopy(commands, 0, newCommand, 1, commands.length);
-			newCommand[0] = command;
-			
-			description.setBuildSpec(newCommand);
-			project.setDescription(description, null);
-		}
-		catch (CoreException e)
-		{
-			e.printStackTrace();
-		}
-
-	}
-	
-	public String getEPUBName ( IProject project )
-	{
-		String	ePubName = "";
-
-		try
-		{
-			IProjectDescription description = project.getDescription();			
-	
-			ICommand[] 	commands = description.getBuildSpec();
-			
-			if (commands.length> 0)
-			{
-				ICommand command = commands[0];
-				Map<String,String>  nameMap = command.getArguments();
-				ePubName = nameMap.get(PluginConstants.EPUBFILE_NAME);
-			}
-		}
-		catch (CoreException e)
-		{
-			e.printStackTrace();
-		}
-
-		System.out.println(".project ePubName: " + ePubName);
-		return ePubName;
 	}
 }
