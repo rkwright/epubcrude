@@ -215,7 +215,7 @@ public class EPubFile
                 String eName = getEntryName(entryFiles[i]);
  
                 // don't add the archive to itself!  Also skip the "mimetype" file as we already added it first
-                if ( !eName.equals( MIMETYPE_FILE ) && !eName.equals(zipFileName)  && !eName.startsWith(".") )
+                if ( !eName.equals( MIMETYPE_FILE ) && !eName.equals(zipFileName)  && !eName.startsWith(".") && !eName.contains(".DS_Store"))
                     writeZipFileEntry( zos, entryFiles[i], method );
             }
             return; 

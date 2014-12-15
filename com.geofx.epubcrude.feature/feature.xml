@@ -2,7 +2,7 @@
 <feature
       id="com.geofx.epubcrude.feature"
       label="epubcrude Feature"
-      version="1.0.4.qualifier"
+      version="1.0.5.qualifier"
       provider-name="Geo-F/X">
 
    <description url="http://www.example.com/description">
