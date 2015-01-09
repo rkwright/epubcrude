@@ -350,7 +350,7 @@ public class EPubFile
                 if (entry.isDirectory())
                 {
                 	File file = new File(fileName);
-                	if(!file.mkdir())
+                	if (!file.mkdir())
                 	{
                 		System.out.println("Unable to create dir: " + fileName);
                 	}
@@ -391,7 +391,7 @@ public class EPubFile
      * Simple method to extract the path from a filename and ensure that 
      * the necessary chain of folders exist
      * 
-     * @param fileName containg path that needs to be checked and created if needed
+     * @param fileName containing path that needs to be checked and created if needed
      * 
      * @return true if a folder needed to be created, else false
      */
@@ -418,7 +418,94 @@ public class EPubFile
     	
     	return ret;
     }
-    
+
+    /**
+     * Read and write out the contents of a ePub file, deleting the
+     * existing content if it exists.  So the content of the EPUB effectively
+     * overwrites the existing content.
+     * 
+     * @param dir - the destination to which the files are written
+     * @param zipName - the name of the ePub file that is being extracted
+     * @return
+     */
+    public boolean mergeEPub( String dir, String zipName )
+    {
+        try
+        {
+            BufferedOutputStream    dest = null;
+            BufferedInputStream     is = null;
+            ZipEntry                entry;
+            ZipFile                 zipfile = new ZipFile(zipName );
+            Enumeration             e = zipfile.entries();
+            
+            while (e.hasMoreElements())
+            {
+                entry = (ZipEntry) e.nextElement();
+                // System.out.println("Extracting: " + entry);
+
+                String fileName = dir + "/" + entry.getName().replaceAll(File.pathSeparator, "/");
+
+                if (entry.isDirectory())
+                {
+                	File file = new File(fileName);
+                	if (!file.mkdir())
+                	{
+                		System.out.println("Unable to create dir: " + fileName);
+                	}
+                }
+                else
+                {
+	                is = new BufferedInputStream(zipfile.getInputStream(entry));
+	                int count;
+	                byte data[] = new byte[BUFFER];
+	
+	                // remove any existing file so we overwrite
+	    	        removeExisting(new File(fileName));
+	               
+	                createDirs( fileName );
+	                
+	                FileOutputStream fos = new FileOutputStream( fileName );
+	                dest = new BufferedOutputStream(fos, BUFFER);
+	
+	                while ((count = is.read(data, 0, BUFFER)) != -1)
+	                {
+	                    dest.write(data, 0, count);
+	                }
+	
+	                dest.flush();
+	                dest.close();
+	                fos.close();
+	                is.close();
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Remove an existing directory tree
+     * 
+     * @param f
+     * @throws IOException
+     */
+    public void removeExisting ( File f ) throws IOException 
+    {
+    	if (f.isDirectory()) 
+    	{
+    		for (File c : f.listFiles())
+    		      removeExisting(c);
+    	}
+    		  
+    	if (!f.delete())
+    		    throw new FileNotFoundException("Failed to delete file: " + f);
+    }
+
     public boolean dumpePub()
     {
         return dumpePub( baseDir, zipFileName );

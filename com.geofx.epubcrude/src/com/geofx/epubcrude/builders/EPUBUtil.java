@@ -16,6 +16,7 @@
 
 package com.geofx.epubcrude.builders;
 
+import java.io.File;
 import java.util.Map;
 
 import org.eclipse.core.commands.ExecutionEvent;
@@ -23,9 +24,13 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
 import org.eclipse.core.resources.ICommand;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -62,6 +67,20 @@ public class EPUBUtil implements IHandler
 			return null;
 		}
 
+		IFile	epubFile = project.getFile(getEPUBName(project));
+		IPath	epubPath = epubFile.getFullPath();
+		IPath	epubAbs = epubPath.makeAbsolute();
+		String	epubStr = epubPath.toPortableString();
+		String	epubStrA = epubAbs.toOSString();
+		String	epubStrS = epubAbs.toString();
+		IPath	epibLoc = project.getLocation();
+		
+		//get object which represents the workspace  
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();  
+
+		//get location of workspace (java.io.File)  
+		File workspaceDirectory = workspace.getRoot().getLocation().toFile();
+		
 		InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), "", 
 								"Enter new name for the EPUB file for " + project.getName(), getEPUBName(project), new NameChecker());
 
