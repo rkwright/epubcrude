@@ -19,6 +19,8 @@
 
 package com.geofx.epubcrude.validator;
 
+import java.io.File;
+
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -26,15 +28,19 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
-import com.adobe.epubcheck.api.Report;
+import com.adobe.epubcheck.api.MasterReport;
+import com.adobe.epubcheck.messages.Message;
+import com.adobe.epubcheck.messages.MessageDictionary;
+import com.adobe.epubcheck.messages.MessageId;
+import com.adobe.epubcheck.messages.MessageLocation;
 import com.adobe.epubcheck.util.FeatureEnum;
 
-public class BuilderReport implements Report
+public class BuilderReport extends MasterReport
 {
-	IProject	project;
-	protected int	errorCount = 0;
-	protected int 	warningCount = 0;
-	protected int 	exceptionCount = 0;
+	protected IProject	project;
+	protected int		errorCount = 0;
+	protected int 		warningCount = 0;
+	protected int 		exceptionCount = 0;
 	
 	public BuilderReport( IProject project, String ePubName )
 	{
@@ -114,6 +120,114 @@ public class BuilderReport implements Report
 		//System.out.printf("Report.warning: res: %s, line: %3d, col: %3d, msg: %s\n ", resource, line, column, message);	
 		
 		generateMarker(resource, line, message, IMarker.PRIORITY_NORMAL, IMarker.SEVERITY_WARNING);
+	}
+
+	public void close()
+	{
+		System.out.println("Close called");
+		// TODO Auto-generated method stub
+		
+	}
+
+	public int generate()
+	{
+		System.out.println("generate called");
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public String getCustomMessageFile()
+	{
+		System.out.println("getCustomMessageFile called");
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public MessageDictionary getDictionary()
+	{
+		System.out.println("getDictionary called");
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getEpubFileName()
+	{
+		System.out.println("getEpubFileName called");
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public int getFatalErrorCount()
+	{
+		System.out.println("getFatalErrorCount called");		
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getReportingLevel()
+	{
+		System.out.println("getReportingLevel called");
+
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public void initialize()
+	{
+		System.out.println("initialize called");
+
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void message(MessageId arg0, MessageLocation loc, Object... args)
+	{
+		MessageDictionary dictionary = super.getDictionary();
+		Message message = dictionary.getMessage(arg0);
+		System.out.println("message(ID) called: " + message.getID() + " msg: '" + message.getMessage(args) + "' severity: " + message.getSeverity() + " suggestion: '" + message.getSuggestion() + "'");
+		System.out.println("\tLocation: " + loc.getFileName() + " line: " + loc.getLine() + " col: " + loc.getColumn() + " context: " + loc.getContext());
+
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void message(Message arg0, MessageLocation arg1, Object... args)
+	{
+		System.out.println("message called");
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setCustomMessageFile(String arg0)
+	{
+		System.out.println("setCustomMessage called");
+
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setEpubFileName(String arg0)
+	{
+		System.out.println("setEpubFileName called");
+
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setOverrideFile(File arg0)
+	{
+		System.out.println("setOverrideFile called");
+
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setReportingLevel(int arg0)
+	{
+		System.out.println("setReportingLevel called");
+
+		// TODO Auto-generated method stub
+		
 	}
 
 } 
