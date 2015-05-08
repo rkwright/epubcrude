@@ -20,6 +20,9 @@
 package com.geofx.epubcrude.validator;
 
 import java.io.File;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
@@ -33,6 +36,7 @@ import com.adobe.epubcheck.messages.Message;
 import com.adobe.epubcheck.messages.MessageDictionary;
 import com.adobe.epubcheck.messages.MessageId;
 import com.adobe.epubcheck.messages.MessageLocation;
+import com.adobe.epubcheck.messages.Severity;
 import com.adobe.epubcheck.util.FeatureEnum;
 
 public class BuilderReport extends MasterReport
@@ -41,6 +45,20 @@ public class BuilderReport extends MasterReport
 	protected int		errorCount = 0;
 	protected int 		warningCount = 0;
 	protected int 		exceptionCount = 0;
+	protected int 		markerCount = 0;
+	
+	// create map for Severity to IMarker.  Unfortunately, IMarker only has 3 levels...
+	private static final Map<Severity, Integer> SEVERITY_MAP = createMap();
+	private static Map<Severity, Integer> createMap() {
+		Map<Severity, Integer> aMap = new HashMap<Severity, Integer>();
+        aMap.put(Severity.FATAL, IMarker.SEVERITY_ERROR);
+        aMap.put(Severity.SUPPRESSED, IMarker.SEVERITY_ERROR);
+        aMap.put(Severity.ERROR, IMarker.SEVERITY_ERROR);
+        aMap.put(Severity.WARNING, IMarker.SEVERITY_WARNING);
+        aMap.put(Severity.INFO, IMarker.SEVERITY_INFO);
+        aMap.put(Severity.USAGE, IMarker.SEVERITY_INFO);
+        return Collections.unmodifiableMap(aMap);
+    }
 	
 	public BuilderReport( IProject project, String ePubName )
 	{
@@ -60,6 +78,8 @@ public class BuilderReport extends MasterReport
 			
 			IPath		path = Path.fromOSString(resourcePath);
 			IResource 	resource = project.findMember(path);
+			if (resource == null)
+				resource = project;
 			try
 			{
 				IMarker marker = resource.createMarker( IMarker.PROBLEM );
@@ -180,12 +200,33 @@ public class BuilderReport extends MasterReport
 		
 	}
 
+	protected String getResourceLocation ( MessageLocation loc, Object... args ) 
+	{
+		String resourceLoc = loc.getFileName();
+		String file = args.length > 0 ? args[0].toString() : "";
+
+		if (file != null && file.length() > 0)
+		{
+			IPath	path = Path.fromOSString(file);
+			if (project.findMember(path) != null)
+				resourceLoc = file;
+		}
+		return resourceLoc;
+	}
+	
 	public void message(MessageId arg0, MessageLocation loc, Object... args)
 	{
+		markerCount++;
 		MessageDictionary dictionary = super.getDictionary();
 		Message message = dictionary.getMessage(arg0);
+		//String file = args.length > 0 ? args[0].toString() : "<null>";
 		System.out.println("message(ID) called: " + message.getID() + " msg: '" + message.getMessage(args) + "' severity: " + message.getSeverity() + " suggestion: '" + message.getSuggestion() + "'");
-		System.out.println("\tLocation: " + loc.getFileName() + " line: " + loc.getLine() + " col: " + loc.getColumn() + " context: " + loc.getContext());
+		System.out.println("\tLocation: " + getResourceLocation(loc, args) + " line: " + loc.getLine() + " col: " + loc.getColumn() + " context: " + loc.getContext() + " count: " + markerCount);
+
+		int	severity = SEVERITY_MAP.get(message.getSeverity());
+		int	priority = message.getSeverity() == Severity.FATAL ? IMarker.PRIORITY_HIGH : IMarker.PRIORITY_NORMAL;
+		
+		generateMarker(getResourceLocation(loc, args), loc.getLine(), message.getMessage(args), priority, severity);
 
 		// TODO Auto-generated method stub
 		

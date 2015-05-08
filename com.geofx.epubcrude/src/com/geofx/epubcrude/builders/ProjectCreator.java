@@ -150,7 +150,7 @@ public class ProjectCreator
 			EPUBUtil.saveEPUBName(project,  ePubFileName);
 
 			// get the singleton instance of the ePubFile object. It has quasi-static methods we want.
-			EPubFile ePubFile = Activator.getDefault().getEPubFile();
+			//EPubFile ePubFile = Activator.getDefault().getEPubFile();
 			
 			// here we extract the contents of the user's SOURCE ePub file and serialize them into the 
 			// project's folder
